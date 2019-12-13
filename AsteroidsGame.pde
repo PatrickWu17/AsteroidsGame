@@ -1,11 +1,13 @@
 Spaceship ship = new Spaceship();
 Star[] bruh = new Star[400];
 ArrayList <Asteroid> rocks = new ArrayList<Asteroid>();
+ArrayList <bullet> joe = new ArrayList<bullet>();
 boolean dPressed = false;
 boolean aPressed = false;
 boolean wPressed = false;
 boolean sPressed = false;
 boolean ePressed = false;
+boolean spacePressed = false;
 
 public void setup() 
 {
@@ -13,7 +15,7 @@ public void setup()
   for(int i = 0; i < bruh.length; i++){
    bruh[i] = new Star();
   }
-  for(int i = 0; i < 20; i++){
+  for(int i = 0; i < 50; i++){
     rocks.add(new Asteroid());
   }
   
@@ -23,8 +25,35 @@ public void draw()
   background(0);
   ship.show();
   ship.move();
+  for(int i  = 0; i < joe.size(); i++){
+   joe.get(i).show();
+   joe.get(i).movez();  
+   if(joe.get(i).getBulletX() > width || joe.get(i).getBulletX() < 0 || joe.get(i).getBulletY() > height || joe.get(i).getBulletX() < 0){
+    joe.remove(i); 
+   }
+   /*if(joe.get(i).getBulletX() > width)
+    {     
+      joe.remove(i);
+      break;
+    }    
+    else if (joe.get(i).getBulletX() < 0)
+    {     
+     joe.remove(i);
+     break;
+    }    
+    if(joe.get(i).getBulletY() > height)
+    {    
+      joe.remove(i);
+      break;
+    } 
+    
+    else if (joe.get(i).getBulletY() < 0) 
+    {     
+      joe.remove(i);
+      break;
+    } */
+  }
   color(127);
-  
   for(int i = 0; i < bruh.length; i++){
   bruh[i].show(); 
   } 
@@ -33,6 +62,12 @@ public void draw()
     rocks.get(i).move();
     if(dist((float)ship.getCenterX(), (float)ship.getCenterY(), (float)rocks.get(i).getCenterX(), (float)rocks.get(i).getCenterY()) < 20){
       rocks.remove(i); 
+    }
+    for(int g = 0; g < joe.size(); g++){
+     if(dist((float)rocks.get(i).getCenterX(),(float)rocks.get(i).getCenterY(),(float)joe.get(g).getBulletX(),(float)joe.get(g).getBulletY()) < 20){
+       rocks.remove(i);  
+       break;
+     }
     }
     
   }
@@ -56,6 +91,9 @@ public void draw()
    ship.myCenterX = Math.random() * 1000;
    ship.myCenterY = Math.random() * 1000;
  }
+ if(spacePressed == true){
+   joe.add(new bullet(ship));
+ }
 }
 public void keyPressed(){
  if(key == 'd'){
@@ -68,6 +106,8 @@ public void keyPressed(){
    sPressed = true;
  }else if(key == 'e'){
    ePressed = true;
+ }else if(key == ' '){
+   spacePressed = true;
  }
 }
 void keyReleased(){
@@ -81,5 +121,7 @@ void keyReleased(){
    sPressed = false;
  }else if(key == 'e'){
    ePressed = false;
+ }else if(key == ' '){
+   spacePressed = false;
  }
 }
